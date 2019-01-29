@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+
+<!-- Production Project -->
+
+<!DOCTYPE project [
+<!ENTITY run_type "physics">
+<!ENTITY name "PROJECT_NAME">
+<!ENTITY release "LARSOFT_RELEASE_NAME">
+<!ENTITY user "USER_NAME">
+]>
+
+<job>
+
+<project name="&name;">
+
+  <!-- Group -->
+  <group>uboone</group>
+
+  <!-- Project size -->
+  <numevents>250000</numevents>
+
+  <!-- Operating System -->
+  <os>SL6</os>
+
+  <!-- Batch resources -->
+  <resource>DEDICATED,OPPORTUNISTIC</resource>
+
+  <!-- Larsoft information -->
+  <larsoft>
+    <tag>&release;</tag>
+    <qual>e10:prof</qual>
+    <local>TARBALL_PATH</local>
+  </larsoft>
+
+  <!-- Project stages -->
+  
+  <stage name="pndr">
+    <fcl>/uboone/app/users/jdevries/larsoft_v06_26_01_10/my_pandora_writer.fcl</fcl>
+    <inputlist>RUNLIST_PATH</inputlist>
+    <outdir>/pnfs/uboone/scratch/users/USER_NAME/PROJECT_NAME/pndr/</outdir>
+    <logdir>/pnfs/uboone/scratch/users/USER_NAME/PROJECT_NAME/pndr/</logdir>
+    <workdir>/pnfs/uboone/scratch/users/USER_NAME/work/&name;</workdir>
+    <numjobs>MAX_FILES</numjobs>
+    <lines>request_memory=4096</lines>
+    <datatier>reconstructed</datatier>
+    <defname>&name;_pndr</defname>
+  </stage>
+
+</project>
+
+</job>
+
