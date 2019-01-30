@@ -1,0 +1,18 @@
+#include "reco_uboone_mcc8_driver_common.fcl"
+
+process_name: PandoraWriter
+
+services.DetectorClocksService.InheritClockConfig:  false
+
+physics.producers.gaushit.LongMaxHits:[25, 25, 25]
+
+physics.producers.pandoraWriter: @local::microboone_pandorawriter 
+physics.producers.pandoraWriter.HitFinderModuleLabel: "gaushit" 
+physics.producers.pandoraWriter.ConfigFile: "PandoraSettings_Write.xml" 
+
+services.TFileService.fileName: "reco_stage_2_hist.root"
+physics.reco: [ pandoraWriter ]
+physics.trigger_paths: [ reco ]
+outputs.out1.fileName: "%ifb_%tc_reco2.root"
+outputs.out1.dataTier: "reconstructed"
+source.inputCommands: ["keep *_*_*_*", "drop *_*_*_McRecoStage2" ]
