@@ -16,7 +16,7 @@ source setup_project.sh $project_name $prestage
 echo "Creating/cleaning directories..."
 
 if [ -d "/pnfs/uboone/scratch/users/$user_name/$project_name/pndr" ]; then
-    rm -f /pnfs/uboone/scratch/users/$user_name/$project_name/pndr/* 
+    rm -rf /pnfs/uboone/scratch/users/$user_name/$project_name/pndr/* 
 else
     mkdir -p "/pnfs/uboone/scratch/users/$user_name/$project_name/pndr"
 fi
@@ -43,20 +43,7 @@ project.py --xml $xml_name --stage pndr --submit &> /dev/null
 sleep 5
 source show_remaining_jobs.sh $xml_name 
 
-echo "Resubmitting failed jobs..."
-failedJobs=100
-counter=1
+#echo "Resubmitting failed jobs..."
+#source resubmit_failed_jobs.sh $xml_name
 
-while [ $failedJobs!= 0 ] 
-do
-    echo "Resubmit cycle $counter"
-
-    project.py --xml $xml_name --stage pndr --check
-    rm makeup.txt
-    project.py --xml $xml_name --stage pndr --makeup > makeup.txt
-    failedJobs=$(tail -n1 makeup.txt | awk -F= 'END{ split($0,arr," "); print arr[4]  }')
-	
-    source show_remaining_jobs.sh $xml_name 
-    counter=$[$counter+1]
-done
 echo -ne \\n
