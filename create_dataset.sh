@@ -6,7 +6,8 @@ project_name=$2 	#a samweb project definition
 larsoft_release_name=$3 #the LArSoft release you are using to reconstruct events
 tarball_path=$4 	#fully-qualified path to your LArAoft release tarball
 max_files=$5 		#the maximum number of files to process
-prestage=$6 		#whether to stage the files in the provided samweb project before running the scripts
+events_per_file=$6      #number of events per file to process
+prestage=$7 		#whether to stage the files in the provided samweb project before running the scripts
 
 #setup project
 echo "Setting up project..."
@@ -35,7 +36,9 @@ echo "Creating xml file..."
 xml_name=pndr_writer_${project_name}.xml
 rm $xml_name
 
-sed -e s,PROJECT_NAME,$project_name, -e s,LARSOFT_RELEASE_NAME,$larsoft_release_name, -e s,USER_NAME,$user_name, -e s,TARBALL_PATH,$tarball_path, -e s,RUNLIST_PATH,$runlist_location, -e s,MAX_FILES,$max_files, pndr_writer.xml > $xml_name 
+total_number_events=$max_files*$events_per_file
+
+sed -e s,PROJECT_NAME,$project_name, -e s,LARSOFT_RELEASE_NAME,$larsoft_release_name, -e s,USER_NAME,$user_name, -e s,TARBALL_PATH,$tarball_path, -e s,RUNLIST_PATH,$runlist_location, -e s,MAX_FILES,$max_files, -e s,TOTAL_EVENTS,$total_number_events, pndr_writer.xml > $xml_name 
 
 #submit jobs
 echo "Submitting jobs..."
