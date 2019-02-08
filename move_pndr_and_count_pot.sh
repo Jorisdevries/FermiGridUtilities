@@ -52,5 +52,5 @@ echo "POT counting output:"
 
 #Note: for data samples newer than Neutrino 2016 supply the -v2 flag
 cd $cwd
-getDataInfo.py --run-subrun-list $pot_runlist_location 
+getDataInfo.py --run-subrun-list $pot_runlist_location | tee saved_pot_output.txt
 
