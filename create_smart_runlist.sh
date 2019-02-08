@@ -4,7 +4,8 @@
 project_name=$1
 max=$2
 
-file_list=`samweb list-files "defname: $project_name and availability: physical"`
+#file_list=$(samweb list-files "defname: $project_name and availability: physical" | grep "PhysicsRun-.*_reco2.root")
+file_list=$(samweb list-files "defname: $project_name and availability: physical")
 
 counter=0
 

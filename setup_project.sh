@@ -6,9 +6,9 @@ source /grid/fermiapp/products/common/etc/setups.sh
 setup jobsub_client
 
 #get samweb credentials
-kx509
-cigetcert -i "Fermi National Accelerator Laboratory"
-voms-proxy-init -noregen -voms fermilab:/fermilab/uboone/Role=Analysis
+kx509 &> /dev/null
+cigetcert -i "Fermi National Accelerator Laboratory" &> /dev/null
+voms-proxy-init -noregen -voms fermilab:/fermilab/uboone/Role=Analysis &> /dev/null
 
 #prestage dataset
 if $prestage ; then
