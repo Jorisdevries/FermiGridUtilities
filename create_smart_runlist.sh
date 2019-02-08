@@ -26,7 +26,11 @@ do
     counter=$[$counter+1]
 done
 
-rm runlist.txt
+if [[ -f runlist.txt  ]];
+then
+    rm runlist.txt
+fi
+
 sed '/^\s*$/d' temp.txt > runlist.txt
 rm temp.txt
 

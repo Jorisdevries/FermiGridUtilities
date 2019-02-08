@@ -35,7 +35,11 @@ runlist_location=$(find `pwd` -name runlist.txt)
 #create custom xml file to create pndr files for this project from its reco2 files
 echo "Creating xml file..."
 xml_name=pndr_writer_${project_name}.xml
-rm $xml_name
+
+if [[ -f $xml_name  ]];
+then
+    rm $xml_name
+fi
 
 total_number_events=$(($max_files * $events_per_file))
 
