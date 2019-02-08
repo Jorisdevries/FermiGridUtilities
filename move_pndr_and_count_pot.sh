@@ -30,7 +30,7 @@ do
 
     fileIdentifier=$[$fileIdentifier+1]
 
-    cp Pandora_Events.pndr ${pndr_dir}Pandora_Events_${pndr_label}_${fileIdentifier}.pndr
+    cp Pandora_Events.pndr ${pndr_dir}/Pandora_Events_${pndr_label}_${fileIdentifier}.pndr
 
     file_name=$(find -name "PhysicsRun-*.root")
     file_name=${file_name:2}
