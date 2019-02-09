@@ -4,7 +4,7 @@ This repository is a tool intended to speed up the process of creating .pndr fil
 
 # Usage
 
-All the settings can be found in run.sh. The settings are:
+All the settings can be found in `run.sh`. The settings are:
 * user_name: the Fermi servies account to use to authenticate with Kerberos and get a grid certificate
 * project_name: the name of the samweb project containing (only!) relevant reco2 .root files
 * larsoft_release_name: the LArSoft version used to process the files (see next item) e.g. v06_26_01_10
