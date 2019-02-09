@@ -13,8 +13,8 @@ All the settings can be found in `run.sh`. The settings are:
 * `events_per_file`: the number of events per file to process
 * `prestage`: whether to prestage the files in the supplied samweb definition before attempting to read them. This will take some time, but if your files are not staged nothing will happen.
 * `file_prefix`: the file prefix to give to the output .pndr files. Output files will look like: Pandora_Events_${file_prefix}_${counter}.pndr
-* `resumbit`: whether to resubmit failed jobs. This does not work for .pndr files as the output root files are flagged as invalid. Set to false as default.
-* `resumbit_cycles`: if resumbitting failed jobs, how many resubmission cycles to maximally allow
+* `resumbit`: whether to resubmit failed jobs. This does not work for `pandora_writer.fcl` as the output root files are flagged as invalid. Set to false as default. This option is useful when the working .fcl file is modified to produce 'valid' .root files.
+* `resumbit_cycles`: if resumbitting failed jobs, how many resubmission cycles to maximally allow. One cycle corresponds to `project.py --xml $xml_name --stage pndr --check` followed by `project.py --xml $xml_name --stage pndr --makeup`.
 
 The output files will end up in `/pnfs/uboone/scratch/users/${user_name}/${project_name}_collected_pndr`. All other necessary working directories will be created by the script, if they do not already exist. 
 
