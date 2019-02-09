@@ -21,7 +21,7 @@ fi
 
 #setup project
 echo "Setting up project..."
-source setup_project.sh $project_name $prestage
+source setup_project.sh $user_name $project_name $prestage
 
 #create or clean necessary directories
 echo "Creating/cleaning directories..."

@@ -1,7 +1,9 @@
-project_name=$1
-prestage=$2
+user_name=$1
+project_name=$2
+prestage=$3
 
 #setup grid prerequisites
+kinit ${user_name}@FNAL.GOV
 source /grid/fermiapp/products/common/etc/setups.sh
 setup jobsub_client
 
