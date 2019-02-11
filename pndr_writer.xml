@@ -41,7 +41,7 @@
     <logdir>/pnfs/uboone/scratch/users/USER_NAME/PROJECT_NAME/pndr/</logdir>
     <workdir>/pnfs/uboone/scratch/users/USER_NAME/work/&name;</workdir>
     <numjobs>MAX_FILES</numjobs>
-    <lines>request_memory=4096</lines>
+    <memory>12000</memory>
     <datatier>reconstructed</datatier>
     <defname>&name;_pndr</defname>
   </stage>

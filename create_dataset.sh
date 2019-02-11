@@ -63,6 +63,6 @@ fi
 
 #collect pndr output files in a separate directory
 echo "Moving .pndr files and constructing POT runlist..."
-source move_pndr_and_count_pot.sh /pnfs/uboone/scratch/users/$user_name/$project_name/pndr /pnfs/uboone/scratch/users/$user_name/${project_name}_collected_pndr $file_prefix
+source move_pndr_and_count_pot.sh /pnfs/uboone/scratch/users/$user_name/$project_name/pndr /pnfs/uboone/scratch/users/$user_name/${project_name}_collected_pndr $project_name $file_prefix
 
 echo -ne \\n

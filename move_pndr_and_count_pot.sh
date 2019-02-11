@@ -4,7 +4,8 @@
 # Grab the input parameters.
 source_dir=$1 #grid output directory that contains lots of subdirectories
 pndr_dir=$2
-pndr_label=$3
+project_name=$3
+pndr_label=$4
 
 fileIdentifier=0
 cwd=`pwd`
@@ -13,6 +14,12 @@ if [[ -f pot_runlist.txt  ]];
 then
     rm pot_runlist.txt
 fi
+
+prefix=$(samweb list-files "defname: $project_name" | head -n1)
+prefix=${prefix%.root}
+prefix=${prefix##*_}
+
+echo $prefix
 
 touch pot_runlist.txt
 pot_runlist_location=$(readlink -f pot_runlist.txt)
@@ -34,8 +41,9 @@ do
 
     file_name=$(find -name "PhysicsRun-*.root")
     file_name=${file_name:2}
-    #file_name=${file_name%filter*}
-    #prefix="filter.root"
+    file_name=${file_name%$prefix*}
+    suffix="${prefix}.root"
+    file_name=${file_name}$suffix
 
     output=$(samweb get-metadata $file_name)
     run_info=$(echo "$output" | head -n29 | tail -n2)
