@@ -34,10 +34,10 @@ do
 
     file_name=$(find -name "PhysicsRun-*.root")
     file_name=${file_name:2}
-    file_name=${file_name%filter*}
-    prefix="filter.root"
+    #file_name=${file_name%filter*}
+    #prefix="filter.root"
 
-    output=$(samweb get-metadata $file_name$prefix)
+    output=$(samweb get-metadata $file_name)
     run_info=$(echo "$output" | head -n29 | tail -n2)
     clean_run_info=$(echo "$run_info" | cut -c21- | cut -c -9)
     final_run_info=$(echo "$clean_run_info" | tr "." " ")
@@ -48,6 +48,7 @@ do
 done
 echo -ne \\n
 
+echo "Number of .pndr files succesfully created: $fileIdentifier"
 echo "POT counting output:"
 
 #Note: for data samples newer than Neutrino 2016 supply the -v2 flag
