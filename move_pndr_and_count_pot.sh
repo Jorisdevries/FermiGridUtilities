@@ -19,8 +19,6 @@ prefix=$(samweb list-files "defname: $project_name" | head -n1)
 prefix=${prefix%.root}
 prefix=${prefix##*_}
 
-echo $prefix
-
 touch pot_runlist.txt
 pot_runlist_location=$(readlink -f pot_runlist.txt)
 
@@ -39,13 +37,22 @@ do
 
     cp Pandora_Events.pndr ${pndr_dir}/Pandora_Events_${pndr_label}_${fileIdentifier}.pndr
 
+    #convert .root file name in output subdirectory to its original samweb name so its metadata can be checked
     file_name=$(find -name "PhysicsRun-*.root")
     file_name=${file_name:2}
     file_name=${file_name%$prefix*}
     suffix="${prefix}.root"
     file_name=${file_name}$suffix
 
+    #get run and subrun information
     output=$(samweb get-metadata $file_name)
+
+    #continue if file not found
+    if [[ -z $output ]];
+    then
+        continue
+    fi
+
     run_info=$(echo "$output" | head -n29 | tail -n2)
     clean_run_info=$(echo "$run_info" | cut -c21- | cut -c -9)
     final_run_info=$(echo "$clean_run_info" | tr "." " ")
