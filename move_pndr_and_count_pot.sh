@@ -33,10 +33,6 @@ do
        continue 
     fi
 
-    fileIdentifier=$[$fileIdentifier+1]
-
-    cp Pandora_Events.pndr ${pndr_dir}/Pandora_Events_${pndr_label}_${fileIdentifier}.pndr
-
     #convert .root file name in output subdirectory to its original samweb name so its metadata can be checked
     file_name=$(find -name "PhysicsRun-*.root")
     file_name=${file_name:2}
@@ -59,7 +55,9 @@ do
 
     echo "$final_run_info" >> $pot_runlist_location
 
-    #echo -ne " > Copying: ${source_dir}/Pandora_Events_${fileIdentifier}.pndr"\\r
+    #only move pndr file is POT information has been succesfully written to runlist
+    fileIdentifier=$[$fileIdentifier+1]
+    cp Pandora_Events.pndr ${pndr_dir}/Pandora_Events_${pndr_label}_${fileIdentifier}.pndr
 done
 echo -ne \\n
 
