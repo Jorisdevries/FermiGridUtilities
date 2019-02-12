@@ -49,9 +49,18 @@ do
         continue
     fi
 
-    run_info=$(echo "$output" | head -n29 | tail -n2)
-    clean_run_info=$(echo "$run_info" | cut -c21- | cut -c -9)
-    final_run_info=$(echo "$clean_run_info" | tr "." " ")
+    echo "$output"
+
+    run_info=$(echo $output | sed 's/^.*\(Runs.*Parents\).*$/\1/')
+    run_info_2=$(echo $run_info | sed 's/(physics)//g')
+    run_info_3=$(echo $run_info_2 | sed 's/Runs: //g')
+    clean_run_info=$(echo $run_info_3 | sed 's/ Parents//g')
+    spaced_run_info=$(echo "$clean_run_info" | tr "." " ")
+    final_run_info=$(echo $spaced_run_info | sed -e 's/ /&\n/2;P;D')
+
+    #run_info=$(echo "$output" | head -n29 | tail -n2)
+    #clean_run_info=$(echo "$run_info" | cut -c21- | cut -c -9)
+    #final_run_info=$(echo "$clean_run_info" | tr "." " ")
 
     echo "$final_run_info" >> $pot_runlist_location
 
