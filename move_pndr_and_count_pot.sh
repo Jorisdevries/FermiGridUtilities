@@ -16,6 +16,8 @@ then
 fi
 
 prefix=$(samweb list-files "defname: $project_name" | head -n1)
+file_start=$(echo $prefix | cut -f1 -d"_")
+
 prefix=${prefix%.root}
 prefix=${prefix##*_}
 
@@ -34,7 +36,7 @@ do
     fi
 
     #convert .root file name in output subdirectory to its original samweb name so its metadata can be checked
-    file_name=$(find -name "PhysicsRun-*.root")
+    file_name=$(find -name "${file_start}*.root")
     file_name=${file_name:2}
     file_name=${file_name%$prefix*}
     suffix="${prefix}.root"
@@ -68,7 +70,7 @@ echo -ne \\n
 echo "Number of .pndr files succesfully created: $fileIdentifier"
 echo "POT counting output:"
 
-duplicate_entries=$(sort pot_runlist.txt | uniq -cd | wc -l)
+duplicate_entries=$(sort $pot_runlist_location | uniq -cd | wc -l)
 
 if [[ $duplicate_entries != 0 ]];
 then
@@ -77,5 +79,4 @@ fi
 
 #Note: for data samples newer than Neutrino 2016 supply the -v2 flag
 cd $cwd
-getDataInfo.py --run-subrun-list $pot_runlist_location | tee saved_pot_output.txt
-
+getMCPOT.py --run-subrun-list $pot_runlist_location | tee saved_pot_output.txt
