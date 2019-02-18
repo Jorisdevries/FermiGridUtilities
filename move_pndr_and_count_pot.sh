@@ -73,7 +73,8 @@ done
 echo -ne \\n
 
 echo "Number of .pndr files succesfully created: $fileIdentifier"
-echo "POT counting output:"
+
+echo "Calculating summed POT..."
 
 duplicate_entries=$(sort $pot_runlist_location | uniq -cd | wc -l)
 
@@ -85,7 +86,7 @@ fi
 #Note: for data samples newer than Neutrino 2016 supply the -v2 flag
 cd $cwd
 
-if [[ $is_data == True ]]; then
+if [[ $is_data == true ]]; then
     getDataInfo.py --run-subrun-list $pot_runlist_location | tee saved_pot_output.txt
 else
     if [[ -f pot_sums.txt  ]];
@@ -94,24 +95,20 @@ else
     fi
 
     while read line; do
-        output=$(getMCPOT_skipcheck.py -f $line)
-        last_line=$(echo "$output" | tail -n1) 
-        echo $last_line
+        if [[ -f latest_sumpot.txt  ]];
+        then
+            rm latest_sumpot.txt
+        fi
+
+        output=$(getMCPOT_skipcheck.py -f $line &>/dev/null)
+        #last_line=$(echo "$output" | tail -n1) 
+
+        last_line=$(cat latest_sumpot.txt | tail -n1) 
         pot_number=$(echo ${last_line##*:})
         pot_value=$(echo $pot_number | sed -E 's/([+-]?[0-9.]+)[eE]\+?(-?)([0-9]+)/(\1*10^\2\3)/g')
         echo $pot_value >> pot_sums.txt
     done <$pot_runlist_location
 
-#    cat $pot_runlist_location | while read line
-#    do
-#        output=$(getMCPOT_skipcheck.py -f $line &>/dev/null)
-#        last_line=$(echo "$output" | tail -n1) 
-#        echo $last_line
-#        pot_number=$(echo ${last_line##*:})
-#        pot_value=$(echo $pot_number | sed -E 's/([+-]?[0-9.]+)[eE]\+?(-?)([0-9]+)/(\1*10^\2\3)/g')
-#        echo $pot_value >> pot_sums.txt
-#    done
-
     pot_sum=$(paste -sd+ pot_sums.txt | bc)
-    echo "Final POT sum: $pot_sum"
+    echo "Final POT sum: $pot_sum" | tee saved_pot_output.txt
 fi

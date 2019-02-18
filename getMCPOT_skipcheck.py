@@ -79,5 +79,8 @@ if (len(failed)>0):
     print "Tried getting files %i times. Gave up on these files:"%ntry
     print failed
 
+with open('latest_sumpot.txt', 'a+') as the_file:
+    the_file.write(str(sumpot))
+
 print "Total summed POT: %g"%sumpot
 
