@@ -13,6 +13,7 @@ prestage=false                                                                  
 file_prefix="Neutrino2016_BNB_WithDQM"                                                                  # what to call the output files
 resumbit=false                                                                              # whether to resubmit failed jobs 
 resumbit_cycles=3                                                                           # how many resubmit cycles to use
+is_data=False                                                                               # whether files are data
 
 # Run the batch script.
 source create_dataset.sh "$user_name" "$project_name" "$larsoft_release_name" "$tarball_path" "$max_files" "$events_per_file" "$prestage" "$file_prefix" "$resumbit" "$resumbit_cycles" 

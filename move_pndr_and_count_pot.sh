@@ -6,6 +6,7 @@ source_dir=$1 #grid output directory that contains lots of subdirectories
 pndr_dir=$2
 project_name=$3
 pndr_label=$4
+is_data=$5
 
 fileIdentifier=0
 cwd=`pwd`
@@ -42,23 +43,27 @@ do
     suffix="${prefix}.root"
     file_name=${file_name}$suffix
 
-    #get run and subrun information
-    output=$(samweb get-metadata $file_name)
+    if [[ $is_data = True ]]; then
+        #get run and subrun information
+        output=$(samweb get-metadata $file_name)
 
-    #continue if file not found
-    if [[ -z $output ]];
-    then
-        continue
+        #continue if file not found
+        if [[ -z $output ]];
+        then
+            continue
+        fi
+
+        run_info=$(echo $output | sed 's/^.*\(Runs.*Parents\).*$/\1/')
+        run_info_2=$(echo $run_info | sed 's/(physics)//g')
+        run_info_3=$(echo $run_info_2 | sed 's/Runs: //g')
+        clean_run_info=$(echo $run_info_3 | sed 's/ Parents//g')
+        spaced_run_info=$(echo "$clean_run_info" | tr "." " ")
+        final_run_info=$(echo $spaced_run_info | sed -e 's/ /&\n/2;P;D')
+
+        echo "$final_run_info" >> $pot_runlist_location
+    else
+        echo $file_name >> $pot_runlist_location
     fi
-
-    run_info=$(echo $output | sed 's/^.*\(Runs.*Parents\).*$/\1/')
-    run_info_2=$(echo $run_info | sed 's/(physics)//g')
-    run_info_3=$(echo $run_info_2 | sed 's/Runs: //g')
-    clean_run_info=$(echo $run_info_3 | sed 's/ Parents//g')
-    spaced_run_info=$(echo "$clean_run_info" | tr "." " ")
-    final_run_info=$(echo $spaced_run_info | sed -e 's/ /&\n/2;P;D')
-
-    echo "$final_run_info" >> $pot_runlist_location
 
     #only move pndr file is POT information has been succesfully written to runlist
     cp Pandora_Events.pndr ${pndr_dir}/Pandora_Events_${pndr_label}_${fileIdentifier}.pndr
@@ -79,4 +84,34 @@ fi
 
 #Note: for data samples newer than Neutrino 2016 supply the -v2 flag
 cd $cwd
-getMCPOT.py --run-subrun-list $pot_runlist_location | tee saved_pot_output.txt
+
+if [[ $is_data == True ]]; then
+    getDataInfo.py --run-subrun-list $pot_runlist_location | tee saved_pot_output.txt
+else
+    if [[ -f pot_sums.txt  ]];
+    then
+        rm pot_sums.txt
+    fi
+
+    while read line; do
+        output=$(getMCPOT_skipcheck.py -f $line)
+        last_line=$(echo "$output" | tail -n1) 
+        echo $last_line
+        pot_number=$(echo ${last_line##*:})
+        pot_value=$(echo $pot_number | sed -E 's/([+-]?[0-9.]+)[eE]\+?(-?)([0-9]+)/(\1*10^\2\3)/g')
+        echo $pot_value >> pot_sums.txt
+    done <$pot_runlist_location
+
+#    cat $pot_runlist_location | while read line
+#    do
+#        output=$(getMCPOT_skipcheck.py -f $line &>/dev/null)
+#        last_line=$(echo "$output" | tail -n1) 
+#        echo $last_line
+#        pot_number=$(echo ${last_line##*:})
+#        pot_value=$(echo $pot_number | sed -E 's/([+-]?[0-9.]+)[eE]\+?(-?)([0-9]+)/(\1*10^\2\3)/g')
+#        echo $pot_value >> pot_sums.txt
+#    done
+
+    pot_sum=$(paste -sd+ pot_sums.txt | bc)
+    echo "Final POT sum: $pot_sum"
+fi

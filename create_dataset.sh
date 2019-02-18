@@ -11,6 +11,7 @@ prestage=$7 		        # whether to stage the files in the provided samweb projec
 file_prefix=$8 		        # what to call the output files
 resumbit=$9                 # whether to resubmit failed jobs 
 resumbit_cycles=$10         # how many resubmit cycles to use
+is_data=$11                 # whether your files are data or MCC: important for POT counting
 
 #sanity check on tarball (very important)
 if [[ $tarball_path != /pnfs/uboone/resilient/users/* ]];
@@ -63,6 +64,6 @@ fi
 
 #collect pndr output files in a separate directory
 echo "Moving .pndr files and constructing POT runlist..."
-source move_pndr_and_count_pot.sh /pnfs/uboone/scratch/users/$user_name/$project_name/pndr /pnfs/uboone/scratch/users/$user_name/${project_name}_collected_pndr $project_name $file_prefix
+source move_pndr_and_count_pot.sh /pnfs/uboone/scratch/users/$user_name/$project_name/pndr /pnfs/uboone/scratch/users/$user_name/${project_name}_collected_pndr $project_name $file_prefix $is_data
 
 echo -ne \\n
