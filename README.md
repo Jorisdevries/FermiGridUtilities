@@ -28,3 +28,7 @@ What happens practically is that `pandora_writer.fcl` is run on each of the reco
 The script will also fetch the correct grid certificates for you, submit the relevant grid jobs, and display their progress. In addition, POT information is collected **only** for those jobs that produces a usable .pndr as output and is reported as the script finishes running. The POT output is also saved to file in `saved_pot_output.txt`.
 
 The resulting .pndr files are automatically retrieved from the grid output subdirectories and moved to `/pnfs/uboone/scratch/users/${user_name}/${project_name}_collected_pndr`.
+
+# Debugging
+
+It is possible for the kx509 user proxy to become corrupted. When this happens, you will see Python errors that end in 'TypeError: 'NoneType' object is not iterable'. To fix this issue, enter `jobsub_rm --user=$user_name` and remove the listed file for which the filename begins with `/tmp/x509up_`. After this, `run.sh` should work as normal.
