@@ -35,7 +35,7 @@
   <!-- Project stages -->
   
   <stage name="pndr">
-    <fcl>/uboone/app/users/jdevries/larsoft_v06_26_01_10/my_pandora_writer.fcl</fcl>
+    <fcl>FCL_FILE_PATH</fcl>
     <inputlist>RUNLIST_PATH</inputlist>
     <outdir>/pnfs/uboone/scratch/users/USER_NAME/PROJECT_NAME/pndr/</outdir>
     <logdir>/pnfs/uboone/scratch/users/USER_NAME/PROJECT_NAME/pndr/</logdir>
