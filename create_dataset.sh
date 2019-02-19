@@ -10,8 +10,9 @@ events_per_file=$6          # number of events per file to process
 prestage=$7 		        # whether to stage the files in the provided samweb project before running the scripts
 file_prefix=$8 		        # what to call the output files
 resumbit=$9                 # whether to resubmit failed jobs 
-resumbit_cycles=$10         # how many resubmit cycles to use
-is_data=$11                 # whether your files are data or MCC: important for POT counting
+resumbit_cycles=${10}       # how many resubmit cycles to use
+is_data=${11}               # whether your files are data or MCC: important for POT counting
+fcl_file_name=${12}         # name of the .fcl file to use
 
 #sanity check on tarball (very important)
 if [[ $tarball_path != /pnfs/uboone/resilient/users/* ]];
@@ -43,8 +44,9 @@ then
 fi
 
 total_number_events=$(($max_files * $events_per_file))
+fcl_file_path=$(readlink -m $fcl_file_name)
 
-sed -e s,PROJECT_NAME,$project_name, -e s,LARSOFT_RELEASE_NAME,$larsoft_release_name, -e s,USER_NAME,$user_name, -e s,TARBALL_PATH,$tarball_path, -e s,RUNLIST_PATH,$runlist_location, -e s,MAX_FILES,$max_files, -e s,TOTAL_EVENTS,$total_number_events, pndr_writer.xml > $xml_name 
+sed -e s,PROJECT_NAME,$project_name, -e s,LARSOFT_RELEASE_NAME,$larsoft_release_name, -e s,USER_NAME,$user_name, -e s,TARBALL_PATH,$tarball_path, -e s,RUNLIST_PATH,$runlist_location, -e s,MAX_FILES,$max_files, -e s,TOTAL_EVENTS,$total_number_events, -e s,FCL_FILE_PATH,$fcl_file_path, pndr_writer.xml > $xml_name 
 
 #submit jobs
 echo "Submitting jobs..."
