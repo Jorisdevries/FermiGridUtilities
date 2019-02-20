@@ -7,7 +7,7 @@ max=$2
 #file_list=$(samweb list-files "defname: $project_name and availability: physical" | grep "PhysicsRun-.*_reco2.root")
 file_list=$(samweb list-files "defname: $project_name and availability: physical")
 
-counter=0
+counter=1
 
 for i in $file_list 
 do

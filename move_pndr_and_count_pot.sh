@@ -36,23 +36,7 @@ do
        continue 
     fi
 
-    #convert .root file name in output subdirectory to its original samweb name so its metadata can be checked
-    file_name=$(find -name "${file_start}*.root")
-    file_name=${file_name:2}
-    file_name=${file_name%$prefix*}
-    suffix="${prefix}.root"
-    file_name=${file_name}$suffix
-
-    file_name_string_length=${#file_name}
-
-    if [[ $file_name_string_length < 25 ]];
-        then 
-            echo "> WARNING: the output file in this output subdirectory is very short. It is likely the reco2 file has not been copied over to the output."
-            echo "> Add these lines to your .fcl file:"
-            echo "outputs.out1.fileName: \"%ifb_%tc_reco2.root\""
-            echo "outputs.out1.dataTier: \"reconstructed\""
-            echo "source.inputCommands: [\"keep *_*_*_*\", \"drop *_*_*_McRecoStage2\" ]"
-        fi
+    file_name=$(cat condor_lar_input.list)
 
     if [[ $is_data = True ]]; then
         #get run and subrun information
@@ -73,7 +57,7 @@ do
 
         echo "$final_run_info" >> $pot_runlist_location
     else
-        echo $file_name >> $pot_runlist_location
+        echo "$file_name" >> $pot_runlist_location
     fi
 
     #only move pndr file is POT information has been succesfully written to runlist
@@ -115,6 +99,7 @@ else
         echo -ne " > Processing file $lineNumber"\\r
 
         getMCPOT_skipcheck.py -f $line &>/dev/null
+
         output=$(cat latest_sumpot.txt) 
         pot_number=$(echo ${output##*:})
         pot_value=$(echo $pot_number | sed -E 's/([+-]?[0-9.]+)[eE]\+?(-?)([0-9]+)/(\1*10^\2\3)/g')
