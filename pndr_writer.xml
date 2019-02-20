@@ -28,7 +28,7 @@
   <!-- Larsoft information -->
   <larsoft>
     <tag>&release;</tag>
-    <qual>e10:prof</qual>
+    <qual>QUALIFIER</qual>
     <local>TARBALL_PATH</local>
   </larsoft>
 

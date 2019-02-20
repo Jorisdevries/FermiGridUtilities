@@ -76,17 +76,17 @@ echo "Number of .pndr files succesfully created: $fileIdentifier"
 
 echo "Calculating summed POT..."
 
-duplicate_entries=$(sort $pot_runlist_location | uniq -cd | wc -l)
-
-if [[ $duplicate_entries != 0 ]];
-then
-    echo "WARNING: DUPLICATE ENTRIES IN POT RUNLIST. POT IS OVERESTIMATED."
-fi
-
-#Note: for data samples newer than Neutrino 2016 supply the -v2 flag
 cd $cwd
 
 if [[ $is_data == true ]]; then
+    duplicate_entries=$(sort $pot_runlist_location | uniq -cd | wc -l)
+
+    if [[ $duplicate_entries != 0 ]];
+    then
+        echo "WARNING: DUPLICATE ENTRIES IN POT RUNLIST. POT IS OVERESTIMATED."
+    fi
+
+    #Note: for data samples newer than Neutrino 2016 supply the -v2 flag
     getDataInfo.py --run-subrun-list $pot_runlist_location | tee saved_pot_output.txt
 else
     if [[ -f pot_sums.txt  ]];
