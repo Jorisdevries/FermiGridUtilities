@@ -76,16 +76,17 @@ echo "Number of .pndr files succesfully created: $fileIdentifier"
 
 echo "Calculating summed POT..."
 
+duplicate_entries=$(sort $pot_runlist_location | uniq -cd | wc -l)
+
+if [[ $duplicate_entries != 0 ]];
+then
+    echo "WARNING: DUPLICATE ENTRIES IN POT RUNLIST. POT IS OVERESTIMATED."
+fi
+
 cd $cwd
+lineNumber=0
 
 if [[ $is_data == true ]]; then
-    duplicate_entries=$(sort $pot_runlist_location | uniq -cd | wc -l)
-
-    if [[ $duplicate_entries != 0 ]];
-    then
-        echo "WARNING: DUPLICATE ENTRIES IN POT RUNLIST. POT IS OVERESTIMATED."
-    fi
-
     #Note: for data samples newer than Neutrino 2016 supply the -v2 flag
     getDataInfo.py --run-subrun-list $pot_runlist_location | tee saved_pot_output.txt
 else
@@ -100,13 +101,15 @@ else
             rm latest_sumpot.txt
         fi
 
-        output=$(getMCPOT_skipcheck.py -f $line &>/dev/null)
-        #last_line=$(echo "$output" | tail -n1) 
+        echo -ne " > Processing file $lineNumber"\\r
 
-        last_line=$(cat latest_sumpot.txt | tail -n1) 
-        pot_number=$(echo ${last_line##*:})
+        getMCPOT_skipcheck.py -f $line &>/dev/null
+        output=$(cat latest_sumpot.txt) 
+        pot_number=$(echo ${output##*:})
         pot_value=$(echo $pot_number | sed -E 's/([+-]?[0-9.]+)[eE]\+?(-?)([0-9]+)/(\1*10^\2\3)/g')
         echo $pot_value >> pot_sums.txt
+
+        lineNumber=$[$lineNumber+1]
     done <$pot_runlist_location
 
     pot_sum=$(paste -sd+ pot_sums.txt | bc)

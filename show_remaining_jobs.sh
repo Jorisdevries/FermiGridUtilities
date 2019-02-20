@@ -26,7 +26,7 @@ do
         jobsIdle=$previousIdle
         jobsRunning=$previousRunning
 
-        sleep 5
+        sleep 30 
         continue
     fi
 
@@ -34,6 +34,6 @@ do
     previousRunning=$jobsRunning
 
     echo -ne "\r\033[K > Jobs remaining: $jobsIdle idle and $jobsRunning running"
-    sleep 5
+    sleep 30 
 done
 echo -ne \\n
