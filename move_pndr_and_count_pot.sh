@@ -43,6 +43,17 @@ do
     suffix="${prefix}.root"
     file_name=${file_name}$suffix
 
+    file_name_string_length=${#file_name}
+
+    if [[ $file_name_string_length < 25 ]];
+        then 
+            echo "> WARNING: the output file in this output subdirectory is very short. It is likely the reco2 file has not been copied over to the output."
+            echo "> Add these lines to your .fcl file:"
+            echo "outputs.out1.fileName: \"%ifb_%tc_reco2.root\""
+            echo "outputs.out1.dataTier: \"reconstructed\""
+            echo "source.inputCommands: [\"keep *_*_*_*\", \"drop *_*_*_McRecoStage2\" ]"
+        fi
+
     if [[ $is_data = True ]]; then
         #get run and subrun information
         output=$(samweb get-metadata $file_name)
