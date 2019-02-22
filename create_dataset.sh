@@ -7,13 +7,14 @@ larsoft_release_name=$3     # the LArSoft release you are using to reconstruct e
 qualifier=$4                # the qualifier associated with your LArSoft release
 tarball_path=$5	            # fully-qualified path to your LArAoft release tarball
 max_files=$6 		        # the maximum number of files to process
-events_per_file=$67         # number of events per file to process
-prestage=$8 		        # whether to stage the files in the provided samweb project before running the scripts
-file_prefix=$9 		        # what to call the output files
-resumbit=${10}              # whether to resubmit failed jobs 
-resumbit_cycles=${11}       # how many resubmit cycles to use
-is_data=${12}               # whether your files are data or MCC: important for POT counting
-fcl_file_name=${13}         # name of the .fcl file to use
+events_per_file=$7          # number of events per file to process
+number_files_per_job=$8     # number of files to process per grid job
+prestage=$9 		        # whether to stage the files in the provided samweb project before running the scripts
+file_prefix=${10}	        # what to call the output files
+resumbit=${11}              # whether to resubmit failed jobs 
+resumbit_cycles=${12}       # how many resubmit cycles to use
+is_data=${13}               # whether your files are data or MCC: important for POT counting
+fcl_file_name=${14}         # name of the .fcl file to use
 
 #sanity check on tarball (very important)
 if [[ $tarball_path != /pnfs/uboone/resilient/users/* ]];
@@ -44,10 +45,12 @@ then
     rm $xml_name
 fi
 
-total_number_events=$(($max_files * $events_per_file))
+number_files_present=$(cat runlist.txt | wc -l)
+number_jobs=$(echo "a=$number_files_present; b=$number_files_per_job; if ( a%b ) a/b+1 else a/b" | bc)
+total_number_events=$(($number_files_present * $events_per_file))
 fcl_file_path=$(readlink -m $fcl_file_name)
 
-sed -e s,PROJECT_NAME,$project_name, -e s,LARSOFT_RELEASE_NAME,$larsoft_release_name, -e s,QUALIFIER,$qualifier, -e s,USER_NAME,$user_name, -e s,TARBALL_PATH,$tarball_path, -e s,RUNLIST_PATH,$runlist_location, -e s,MAX_FILES,$max_files, -e s,TOTAL_EVENTS,$total_number_events, -e s,FCL_FILE_PATH,$fcl_file_path, pndr_writer.xml > $xml_name 
+sed -e s,PROJECT_NAME,$project_name, -e s,LARSOFT_RELEASE_NAME,$larsoft_release_name, -e s,QUALIFIER,$qualifier, -e s,USER_NAME,$user_name, -e s,TARBALL_PATH,$tarball_path, -e s,RUNLIST_PATH,$runlist_location, -e s,NUMBER_JOBS,$number_jobs, -e s,TOTAL_EVENTS,$total_number_events, -e s,FCL_FILE_PATH,$fcl_file_path, pndr_writer.xml > $xml_name 
 
 #submit jobs
 echo "Submitting jobs..."

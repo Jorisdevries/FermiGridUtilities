@@ -11,12 +11,12 @@ physics.producers.pandoraWriter.BackTrackerModuleLabel: "gaushitTruthMatch"
 
 
 services.TFileService.fileName: "reco_stage_2_hist.root"
-#services.ParticleInventoryService: @local::standard_particleinventoryservice
+services.ParticleInventoryService: @local::standard_particleinventoryservice
 
 physics.reco: [ pandoraWriter ]
 physics.trigger_paths: [ reco ]
 physics.end_paths: []
 
-outputs.out1.fileName: "%ifb_%tc_reco2.root"
-outputs.out1.dataTier: "reconstructed"
-source.inputCommands: ["keep *_*_*_*", "drop *_*_*_McRecoStage2" ]
+#outputs.out1.fileName: "%ifb_%tc_reco2.root"
+#outputs.out1.dataTier: "reconstructed"
+#source.inputCommands: ["keep *_*_*_*", "drop *_*_*_McRecoStage2" ]

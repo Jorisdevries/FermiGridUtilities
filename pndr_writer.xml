@@ -40,7 +40,7 @@
     <outdir>/pnfs/uboone/scratch/users/USER_NAME/PROJECT_NAME/pndr/</outdir>
     <logdir>/pnfs/uboone/scratch/users/USER_NAME/PROJECT_NAME/pndr/</logdir>
     <workdir>/pnfs/uboone/scratch/users/USER_NAME/work/&name;</workdir>
-    <numjobs>MAX_FILES</numjobs>
+    <numjobs>NUMBER_JOBS</numjobs>
     <memory>12000</memory>
     <datatier>reconstructed</datatier>
     <defname>&name;_pndr</defname>
