@@ -15,6 +15,7 @@ voms-proxy-init -noregen -voms fermilab:/fermilab/uboone/Role=Analysis &> /dev/n
 #prestage dataset
 if $prestage ; then
     echo "Staging files..."
-    samweb prestage-dataset --defname=$project_name &> /dev/null
+    echo "> Number of files succesfully prestaged: " 
+    samweb prestage-dataset --parallel=4 --defname=$project_name | awk '{printf "\r%lu", NR}' 
 fi
 

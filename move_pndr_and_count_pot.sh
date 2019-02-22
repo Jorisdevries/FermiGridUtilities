@@ -38,7 +38,7 @@ do
 
     file_name=$(cat condor_lar_input.list)
 
-    if [[ $is_data = True ]]; then
+    if [[ $is_data == true ]]; then
         #get run and subrun information
         output=$(samweb get-metadata $file_name)
 
