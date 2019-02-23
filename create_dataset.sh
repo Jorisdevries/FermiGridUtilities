@@ -45,7 +45,7 @@ then
     rm $xml_name
 fi
 
-number_files_present=$(cat runlist.txt | wc -l)
+number_files_present=$(cat $runlist_location | wc -l)
 number_jobs=$(echo "a=$number_files_present; b=$number_files_per_job; if ( a%b ) a/b+1 else a/b" | bc)
 total_number_events=$(($number_files_present * $events_per_file))
 fcl_file_path=$(readlink -m $fcl_file_name)

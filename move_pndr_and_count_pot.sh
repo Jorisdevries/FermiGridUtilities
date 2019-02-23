@@ -30,8 +30,9 @@ do
     cd $i
 
     echo -ne " > Processing output from subdirectory $fileIdentifier"\\r
+    file_size_kb=$(du -k "Pandora_Events.pndr" | cut -f1)
 
-    if [[ ! -f Pandora_Events.pndr ]];
+    if [[ $file_size_kb == 0 ]];
     then
        continue 
     fi
