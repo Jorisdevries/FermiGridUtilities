@@ -30,6 +30,12 @@ do
     cd $i
 
     echo -ne " > Processing output from subdirectory $fileIdentifier"\\r
+
+    if [[ ! -f Pandora_Events.pndr ]];
+    then
+        continue 
+    fi
+
     file_size_kb=$(du -k "Pandora_Events.pndr" | cut -f1)
 
     if [[ $file_size_kb == 0 ]];
