@@ -37,37 +37,17 @@ do
     fi
 
     file_size_kb=$(du -k "Pandora_Events.pndr" | cut -f1)
+    job_status=$(cat larStage0.stat)
 
-    if [[ $file_size_kb == 0 ]];
+    if [[ $file_size_kb == 0 || $job_status != 0 ]];
     then
        continue 
     fi
 
-    file_name=$(cat condor_lar_input.list)
+    file_names=$(cat condor_lar_input.list)
+    echo "$file_names" >> $pot_runlist_location
 
-    if [[ $is_data == true ]]; then
-        #get run and subrun information
-        output=$(samweb get-metadata $file_name)
-
-        #continue if file not found
-        if [[ -z $output ]];
-        then
-            continue
-        fi
-
-        run_info=$(echo $output | sed 's/^.*\(Runs.*Parents\).*$/\1/')
-        run_info_2=$(echo $run_info | sed 's/(physics)//g')
-        run_info_3=$(echo $run_info_2 | sed 's/Runs: //g')
-        clean_run_info=$(echo $run_info_3 | sed 's/ Parents//g')
-        spaced_run_info=$(echo "$clean_run_info" | tr "." " ")
-        final_run_info=$(echo $spaced_run_info | sed -e 's/ /&\n/2;P;D')
-
-        echo "$final_run_info" >> $pot_runlist_location
-    else
-        echo "$file_name" >> $pot_runlist_location
-    fi
-
-    #only move pndr file is POT information has been succesfully written to runlist
+    #only move pndr file if POT information has been succesfully written to runlist
     cp Pandora_Events.pndr ${pndr_dir}/Pandora_Events_${pndr_label}_${fileIdentifier}.pndr
 
     fileIdentifier=$[$fileIdentifier+1]
@@ -90,7 +70,7 @@ lineNumber=0
 
 if [[ $is_data == true ]]; then
     #Note: for data samples newer than Neutrino 2016 supply the -v2 flag
-    getDataInfo.py --run-subrun-list $pot_runlist_location | tee saved_pot_output.txt
+    getDataInfo.py -v2 --file-list $pot_runlist_location | tee saved_pot_output.txt
 else
     if [[ -f pot_sums.txt  ]];
     then
